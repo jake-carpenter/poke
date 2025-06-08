@@ -5,11 +5,11 @@ namespace DbTestHarness.Infrastructure;
 
 public class SqlServerRunner : IRunner
 {
-    public async Task<bool> Execute(Server server)
+    public async Task<bool> Execute(SqlServer sqlServer)
     {
         const string template =
             "Data Source={0};TrustServerCertificate=True;Trusted_Connection=Yes";
-        var connectionString = string.Format(template, server.Host);
+        var connectionString = string.Format(template, sqlServer.Host);
         await using var connection = new SqlConnection(connectionString);
 
         try

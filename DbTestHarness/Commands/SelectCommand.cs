@@ -10,8 +10,7 @@ public class SelectCommand(UserConfig userConfig, SqlServerRunner sqlServerRunne
 {
     public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
     {
-        var groups = userConfig.Servers.GroupBy(s => s.Name);
-        var options = AnsiConsole.Prompt(BuildPromptWithGroups(groups));
+        var options = AnsiConsole.Prompt(BuildPromptWithGroups(userConfig.SqlServerGroups));
         IRunner runner = settings.DryRun ? dryRunner : sqlServerRunner;
 
         await AnsiConsole.Status().StartAsync(
@@ -43,20 +42,27 @@ public class SelectCommand(UserConfig userConfig, SqlServerRunner sqlServerRunne
     }
 
     private static MultiSelectionPrompt<ISelectionOption> BuildPromptWithGroups(
-        IEnumerable<IGrouping<string, Server>> groups)
+        ServerGroup[] groups)
     {
         var prompt = new MultiSelectionPrompt<ISelectionOption>()
             .Title("Select which servers to test:")
             .PageSize(20)
+            .Required()
             .InstructionsText(
-                "Press [blue]<space>[/] to toggle a server, [green]<enter>[/] to accept")
-            .UseConverter(opt => opt.Label);
+                "Press [blue]<space>[/] to select an option\nPress [green]<enter>[/] to accept\nPress [red]<cmd+c>[/] to cancel")
+            .HighlightStyle(new Style(Color.Blue, decoration: Decoration.Bold))
+            .UseConverter(opt => opt switch
+            {
+                ServerOption serverOption => $"[grey]{serverOption.Label}[/]",
+                GroupOption groupOption => $"[yellow]{groupOption.Label}[/]",
+                _ => opt.Label
+            });
 
         foreach (var group in groups)
         {
             prompt.AddChoiceGroup(
-                new GroupOption(group.Key),
-                group.Select(s => new ServerOption(s.ServerLabel, s)));
+                new GroupOption(group.Name),
+                group.Servers.Select(s => new ServerOption(s.ServerLabel, s)));
         }
 
         return prompt;

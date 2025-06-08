@@ -4,7 +4,8 @@ namespace DbTestHarness.Models;
 
 public class UserConfig
 {
-    public required Server[] Servers { get; init; }
+    public required ServerGroup[] SqlServerGroups { get; init; }
+    public required SqlServer[] Servers { get; init; }
 
     public static async Task<UserConfig> FromFile(string filePath)
     {
@@ -22,4 +23,10 @@ public class UserConfig
 
         return config;
     }
+}
+
+public class ServerGroup
+{
+    public required string Name { get; init; }
+    public required SqlServer[] Servers { get; init; }
 }

@@ -18,7 +18,10 @@ services.AddSingleton<DryRunner>();
 app.Configure(cfg =>
 {
     cfg.AddCommand<SelectCommand>("select")
-        .WithDescription("testing");
+        .WithDescription("Display a list of configured servers to execute against.");
+
+    cfg.AddCommand<ConfigCommand>("config")
+        .WithDescription("Display configuration.");
 });
 
 await app.RunAsync(args);
