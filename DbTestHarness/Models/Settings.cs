@@ -10,8 +10,10 @@ public sealed class Settings : CommandSettings
     public bool Debug { get; init; }
 
     [CommandOption("-c|--config")]
+    [Description("Configuration file to use")]
     public string ConfigFile { get; init; } = "servers.json";
 
     [CommandOption("-d|--dry-run")]
+    [Description("Dry run the command without attempting any connections")]
     public bool DryRun { get; init; }
 }
