@@ -22,6 +22,9 @@ app.Configure(cfg =>
     cfg.AddCommand<SelectCommand>("select")
         .WithDescription("Display a list of configured servers to execute against.");
 
+    cfg.AddCommand<AllCommand>("all")
+        .WithDescription("Run all configured servers without selection.");
+
     cfg.AddCommand<ConfigCommand>("config")
         .WithDescription("Display configuration.");
 });
