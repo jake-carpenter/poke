@@ -15,6 +15,7 @@
 *.sln.DotSettings
 
 .idea/
+.serena/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
