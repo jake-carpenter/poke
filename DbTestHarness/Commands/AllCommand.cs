@@ -10,9 +10,9 @@ public class AllCommand(UserConfig userConfig, RunnerStatus runnerStatus) : Asyn
     {
         var servers = userConfig.SqlServerGroups
             .SelectMany(group => group.ServerWithGroups)
-            .ToArray();
+            .ToArray<Server>();
 
-        var result = await runnerStatus.Start("Executing", servers, settings);
+        var result = await runnerStatus.Start(servers, settings);
 
         return result;
     }

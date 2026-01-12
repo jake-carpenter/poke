@@ -5,7 +5,7 @@ namespace DbTestHarness.Infrastructure;
 
 public class RunnerStatus(RunnerFactory runnerFactory)
 {
-    public async Task<int> Start(string initialStatus, Server[] servers, Settings settings)
+    public async Task<int> Start(Server[] servers, Settings settings)
     {
         if (servers.Length == 0)
         {
@@ -14,48 +14,69 @@ public class RunnerStatus(RunnerFactory runnerFactory)
             return 1;
         }
 
-        return await AnsiConsole.Status().StartAsync(
-            initialStatus,
-            ctx => IterateServers(ctx, servers, settings)
-        );
-    }
+        var results = new Dictionary<Server, RunResult>();
 
-    private async Task<int> IterateServers(StatusContext ctx, Server[] servers, Settings settings)
-    {
-        var hasFailure = false;
-
-        foreach (var server in servers)
-        {
-            if (server is not SqlServerWithGroup sqlServer)
+        await AnsiConsole.Progress()
+            .AutoClear(false)
+            .HideCompleted(false)
+            .Columns(
+                new SpinnerColumn(),
+                new TaskDescriptionColumn { Alignment = Justify.Left })
+            .StartAsync(async ctx =>
             {
-                AnsiConsole.MarkupLine($"[red]Skipping unsupported server type: {server.GetType().Name}[/]");
-                continue;
-            }
+                var progressTasks = ApplyTasks(ctx, servers);
+                var tasks = servers
+                    .Where(s => progressTasks.ContainsKey(s))
+                    .Select(server => ExecuteServerAsync(server, progressTasks[server], settings, results));
 
-            ctx.Status("Executing");
-            ctx.Spinner(Spinner.Known.Dots);
+                await Task.WhenAll(tasks);
+            });
 
-            var runner = runnerFactory.GetRunner(sqlServer, settings);
-            var result = await runner.Execute(sqlServer);
-            hasFailure |= !result.Succeeded;
-
-            WriteResult(result, sqlServer);
-        }
+        var hasFailure = results.Values.Any(r => !r.Succeeded);
 
         return hasFailure ? 1 : 0;
     }
 
-    private static void WriteResult(RunResult result, Server server)
+    private static Dictionary<Server, ProgressTask> ApplyTasks(ProgressContext ctx, Server[] servers)
+    {
+        var progressTasks = new Dictionary<Server, ProgressTask>();
+        foreach (var server in servers)
+        {
+            if (server is not SqlServerWithGroup sqlServer)
+                continue;
+
+            var description = $"[blue]{sqlServer.GroupName}[/] | [yellow]{sqlServer.Name}[/] | {sqlServer.Host}";
+
+            progressTasks[server] = ctx.AddTask(description, autoStart: true, maxValue: 1);
+        }
+
+        return progressTasks;
+    }
+
+    private async Task ExecuteServerAsync(
+        Server server,
+        ProgressTask progressTask,
+        Settings settings,
+        Dictionary<Server, RunResult> results)
     {
         if (server is not SqlServerWithGroup sqlServer)
             return;
 
-        var (color, symbol) = result.Succeeded
-            ? (color: "green", symbol: "✔")
-            : (color: "red", symbol: "✘");
+        var runner = runnerFactory.GetRunner(sqlServer, settings);
+        var result = await runner.Execute(sqlServer);
 
-        var line =
+        lock (results)
+        {
+            results[server] = result;
+        }
+
+        var (color, symbol) = result.Succeeded
+            ? ("green", "✔")
+            : ("red", "✘");
+
+        progressTask.Description =
             $"[{color}]{symbol}[/] [blue]{sqlServer.GroupName}[/] | [yellow]{sqlServer.Name}[/] | {sqlServer.Host}";
-        AnsiConsole.MarkupLine(line);
+        progressTask.Value = 1;
+        progressTask.StopTask();
     }
 }

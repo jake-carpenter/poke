@@ -11,7 +11,7 @@ public class SelectCommand(UserConfig userConfig, RunnerStatus runnerStatus) : A
     {
         var selected = AnsiConsole.Prompt(BuildPromptWithGroups(userConfig.SqlServerGroups));
         var servers = selected.OfType<ServerOption>().Select(x => x.Server).ToArray();
-        var result = await runnerStatus.Start("Executing", servers, settings);
+        var result = await runnerStatus.Start(servers, settings);
 
         return result;
     }
