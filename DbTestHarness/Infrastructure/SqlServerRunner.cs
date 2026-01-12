@@ -23,9 +23,9 @@ public class SqlServerRunner : IRunner
 
             return RunResult.Success();
         }
-        catch
+        catch (Exception ex)
         {
-            return RunResult.Failure();
+            return RunResult.Failure(ex);
         }
     }
 }

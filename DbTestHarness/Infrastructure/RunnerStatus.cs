@@ -26,11 +26,13 @@ public class RunnerStatus(RunnerFactory runnerFactory)
             {
                 var progressTasks = ApplyTasks(ctx, servers);
                 var tasks = servers
-                    .Where(s => progressTasks.ContainsKey(s))
+                    .Where(progressTasks.ContainsKey)
                     .Select(server => ExecuteServerAsync(server, progressTasks[server], settings, results));
 
                 await Task.WhenAll(tasks);
             });
+
+        DisplayExceptionSummary(results);
 
         var hasFailure = results.Values.Any(r => !r.Succeeded);
 
@@ -78,5 +80,35 @@ public class RunnerStatus(RunnerFactory runnerFactory)
             $"[{color}]{symbol}[/] [blue]{sqlServer.GroupName}[/] | [yellow]{sqlServer.Name}[/] | {sqlServer.Host}";
         progressTask.Value = 1;
         progressTask.StopTask();
+    }
+
+    private static void DisplayExceptionSummary(Dictionary<Server, RunResult> results)
+    {
+        var exceptions = results
+            .Where(kvp => !kvp.Value.Succeeded && kvp.Value.Exception != null)
+            .ToList();
+
+        if (exceptions.Count == 0)
+            return;
+
+        AnsiConsole.WriteLine();
+        AnsiConsole.MarkupLine("[yellow]Exception Summary:[/]");
+        AnsiConsole.WriteLine();
+
+        foreach (var (server, result) in exceptions)
+        {
+            if (server is not SqlServerWithGroup sqlServer)
+                continue;
+
+            var exceptionMessage = result.Exception?.Message ?? "Unknown error";
+            var escapedMessage = Markup.Escape(exceptionMessage);
+            AnsiConsole.MarkupLine($"[blue]{sqlServer.GroupName}[/] | [yellow]{sqlServer.Name}[/] | {sqlServer.Host}");
+            AnsiConsole.WriteLine();
+
+            var exceptionText = new Markup($"[red]{escapedMessage}[/]");
+            var paddedException = new Padder(exceptionText, new Padding(2, 0));
+            AnsiConsole.Write(paddedException);
+            AnsiConsole.WriteLine("\n");
+        }
     }
 }
