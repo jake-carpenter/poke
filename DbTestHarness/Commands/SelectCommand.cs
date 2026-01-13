@@ -7,7 +7,10 @@ namespace DbTestHarness.Commands;
 
 public class SelectCommand(UserConfig userConfig, RunnerStatus runnerStatus) : AsyncCommand<RunSettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, RunSettings settings, CancellationToken cancellationToken)
+    public override async Task<int> ExecuteAsync(
+        CommandContext context,
+        RunSettings settings,
+        CancellationToken cancellationToken)
     {
         var selected = AnsiConsole.Prompt(BuildPromptWithGroups(userConfig.Servers));
         var servers = selected.OfType<ServerOption>().Select(x => x.Server).ToArray();

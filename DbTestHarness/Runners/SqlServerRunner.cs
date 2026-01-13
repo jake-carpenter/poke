@@ -1,3 +1,4 @@
+using DbTestHarness.Commands;
 using DbTestHarness.Infrastructure;
 using DbTestHarness.Models;
 using Microsoft.Data.SqlClient;

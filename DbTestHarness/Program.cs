@@ -1,6 +1,5 @@
 ﻿using DbTestHarness.Commands;
 using DbTestHarness.Infrastructure;
-using DbTestHarness.Models;
 using DbTestHarness.Runners;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
@@ -10,8 +9,6 @@ var registrar = new TypeRegistrar(services);
 var app = new CommandApp(registrar);
 
 // DI registrations
-var userConfig = await UserConfig.FromConfigDirectory();
-services.AddSingleton(_ => userConfig);
 services.AddSingleton<IRunner, SqlServerRunner>();
 services.AddSingleton<RunnerFactory>();
 services.AddSingleton<RunnerStatus>();

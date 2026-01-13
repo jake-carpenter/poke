@@ -1,3 +1,4 @@
+using DbTestHarness.Commands;
 using DbTestHarness.Models;
 using DbTestHarness.Runners;
 

@@ -4,9 +4,9 @@ using Spectre.Console.Cli;
 
 namespace DbTestHarness.Commands;
 
-public class ConfigCommand(UserConfig userConfig) : Command
+public class ConfigCommand : Command<BaseSettings>
 {
-    public override int Execute(CommandContext context, CancellationToken cancellationToken)
+    public override int Execute(CommandContext context, BaseSettings settings, CancellationToken cancellationToken)
     {
         var grid = new Grid()
             .AddColumn(new GridColumn().Alignment(Justify.Right))
@@ -17,7 +17,8 @@ public class ConfigCommand(UserConfig userConfig) : Command
                 new Markup("[grey]Instance[/]"),
                 new Markup("[grey]Host[/]"));
 
-        var groups = new ServerGroups(userConfig.Servers);
+        var config = settings.GetConfig();
+        var groups = new ServerGroups(config.Servers);
 
         foreach (var (_, group) in groups)
         {
