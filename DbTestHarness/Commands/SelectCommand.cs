@@ -19,8 +19,7 @@ public class SelectCommand(UserConfig userConfig, RunnerStatus runnerStatus) : A
         return result;
     }
 
-    private static MultiSelectionPrompt<ISelectionOption> BuildPromptWithGroups(
-        Server[] servers)
+    private static MultiSelectionPrompt<ISelectionOption> BuildPromptWithGroups(IReadOnlyCollection<Server> servers)
     {
         const string instructions =
             """

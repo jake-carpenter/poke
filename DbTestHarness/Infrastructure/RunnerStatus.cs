@@ -6,9 +6,9 @@ namespace DbTestHarness.Infrastructure;
 
 public class RunnerStatus(RunnerFactory runnerFactory)
 {
-    public async Task<int> Start(Server[] servers, RunSettings settings)
+    public async Task<int> Start(IReadOnlyCollection<Server> servers, RunSettings settings)
     {
-        if (servers.Length == 0)
+        if (servers.Count == 0)
         {
             AnsiConsole.MarkupLine("[red]No servers selected.[/]");
 
@@ -43,7 +43,7 @@ public class RunnerStatus(RunnerFactory runnerFactory)
         return hasFailure ? 1 : 0;
     }
 
-    private Dictionary<Server, ProgressTask> ApplyTasks(ProgressContext ctx, Server[] servers, RunSettings settings)
+    private Dictionary<Server, ProgressTask> ApplyTasks(ProgressContext ctx, IReadOnlyCollection<Server> servers, RunSettings settings)
     {
         var progressTasks = new Dictionary<Server, ProgressTask>();
         foreach (var server in servers)

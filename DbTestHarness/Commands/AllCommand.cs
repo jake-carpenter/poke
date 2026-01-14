@@ -1,5 +1,4 @@
 using DbTestHarness.Infrastructure;
-using DbTestHarness.Models;
 using Spectre.Console.Cli;
 
 namespace DbTestHarness.Commands;

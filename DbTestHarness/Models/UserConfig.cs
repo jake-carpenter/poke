@@ -1,6 +1,6 @@
 namespace DbTestHarness.Models;
 
-public class UserConfig
+public record UserConfig
 {
-    public required Server[] Servers { get; init; }
+    public required IReadOnlyCollection<Server> Servers { get; init; }
 }

@@ -2,7 +2,7 @@ namespace DbTestHarness.Models;
 
 public class ServerGroups : Dictionary<string, ServerGroup>
 {
-    public ServerGroups(Server[] servers)
+    public ServerGroups(IReadOnlyCollection<Server> servers)
     {
         foreach (var group in servers.GroupBy(s => s.GroupName))
         {
