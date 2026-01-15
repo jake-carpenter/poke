@@ -17,6 +17,8 @@ services.AddSingleton<IConfigOutput, SqlServerConfigOutput>();
 
 app.Configure(cfg =>
 {
+    cfg.UseAssemblyInformationalVersion();
+
     cfg.AddCommand<SelectCommand>("select")
         .WithDescription("Display a list of configured servers to execute against.");
 
@@ -28,6 +30,7 @@ app.Configure(cfg =>
 
     cfg.AddCommand<AddCommand>("add")
         .WithDescription("Add a new SQL Server to the configuration file.");
+
 });
 
 await app.RunAsync(args);
