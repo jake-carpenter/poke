@@ -6,8 +6,8 @@ namespace Poke.Infrastructure;
 
 public class UserConfigManager
 {
-    private const string WindowsDirectoryName = "Server Test Harness";
-    private const string UnixDirectoryName = "server-test-harness";
+    private const string WindowsDirectoryName = "Poke";
+    private const string UnixDirectoryName = "poke";
     private const string ConfigFilename = "config.json";
 
     private readonly JsonSerializerOptions _jsonOptions = new()
