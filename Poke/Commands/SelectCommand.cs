@@ -5,14 +5,15 @@ using Spectre.Console.Cli;
 
 namespace Poke.Commands;
 
-public class SelectCommand(UserConfig userConfig, RunnerStatus runnerStatus) : AsyncCommand<RunSettings>
+public class SelectCommand(RunnerStatus runnerStatus) : AsyncCommand<RunSettings>
 {
     public override async Task<int> ExecuteAsync(
         CommandContext context,
         RunSettings settings,
         CancellationToken cancellationToken)
     {
-        var selected = AnsiConsole.Prompt(BuildPromptWithGroups(userConfig.Servers));
+        var config = settings.GetConfig();
+        var selected = AnsiConsole.Prompt(BuildPromptWithGroups(config.Servers));
         var servers = selected.OfType<ServerOption>().Select(x => x.Server).ToArray();
         var result = await runnerStatus.Start(servers, settings);
 
