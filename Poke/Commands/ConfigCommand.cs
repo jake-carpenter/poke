@@ -1,6 +1,7 @@
 using Poke.Config;
 using Poke.Infrastructure;
 using Poke.Models;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Poke.Commands;
@@ -15,6 +16,12 @@ public class ConfigCommand(IEnumerable<IConfigOutput> writers, ConfigManager con
     )
     {
         var config = await configManager.Read(settings.ConfigFile);
+        if (config.Servers.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[red]No servers configured.[/]");
+            return 1;
+        }
+
         var serverGroups = new ServerGroups(config.Servers);
 
         foreach (var writer in writers)

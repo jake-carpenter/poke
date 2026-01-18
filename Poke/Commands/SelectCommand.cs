@@ -16,6 +16,13 @@ public class SelectCommand(RunnerStatus runnerStatus, ConfigManager configManage
     )
     {
         var config = await configManager.Read(settings.ConfigFile);
+
+        if (config.Servers.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[red]No servers configured.[/]");
+            return 1;
+        }
+
         var selected = AnsiConsole.Prompt(BuildPromptWithGroups(config.Servers));
         var servers = selected.OfType<ServerOption>().Select(x => x.Server).ToArray();
         var result = await runnerStatus.Start(servers, settings);
