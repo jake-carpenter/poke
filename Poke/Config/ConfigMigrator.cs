@@ -16,7 +16,7 @@ public class ConfigMigrator(JsonConfigFile configFile, IEnumerable<IMigration> m
     /// <returns>The configuration object.</returns>
     public async Task<UserConfig> ExecuteMigrations(string? filePath)
     {
-        var currentJson = await configFile.ReadAsJson(filePath);
+        var currentJson = await configFile.ReadAsJsonDocument(filePath);
         var currentVersion = ReadCurrentVersion(currentJson); // Disposable.
 
         foreach (var migrator in migrators.OrderBy(m => m.From))

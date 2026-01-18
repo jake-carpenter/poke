@@ -54,10 +54,13 @@ public class JsonConfigFile
     /// </summary>
     /// <param name="filePath">The full path to the configuration file. If not provided, the platform-specific default path is used.</param>
     /// <returns>The <see cref="JsonDocument"/> instance.</returns>
-    public async Task<JsonDocument> ReadAsJson(string? filePath)
+    public async Task<JsonDocument> ReadAsJsonDocument(string? filePath)
     {
         filePath ??= GetConfigFilePath();
         await using var stream = File.OpenRead(filePath);
+
+        if (stream.Length == 0)
+            return JsonDocument.Parse("{}");
 
         return await JsonDocument.ParseAsync(stream);
     }

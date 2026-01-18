@@ -15,5 +15,5 @@ public record UserConfigV1
     /// <summary>
     /// The configured servers.
     /// </summary>
-    public required IReadOnlyCollection<Server> Servers { get; init; }
+    public IReadOnlyCollection<Server> Servers { get; init; } = [];
 }
