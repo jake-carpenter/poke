@@ -28,4 +28,11 @@ public interface IRunnerFormatter
     /// <param name="result">The run result.</param>
     /// <returns>The formatted result line.</returns>
     string FormatResultLine(Server server, RunResult result);
+
+    /// <summary>
+    /// Formats the line shown after a server is created.
+    /// </summary>
+    /// <param name="server">The server that was created.</param>
+    /// <returns>The formatted created line.</returns>
+    string FormatCreated(Server server);
 }

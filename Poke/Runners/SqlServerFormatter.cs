@@ -8,11 +8,7 @@ namespace Poke.Runners;
 /// </summary>
 public class SqlServerFormatter : IRunnerFormatter
 {
-    /// <summary>
-    /// Formats the progress line for a running server.
-    /// </summary>
-    /// <param name="server">The server being processed.</param>
-    /// <returns>The formatted progress line.</returns>
+    /// <inheritdoc/>
     public string FormatInProgressLine(Server server)
     {
         if (server is not SqlServer sqlServer)
@@ -22,12 +18,7 @@ public class SqlServerFormatter : IRunnerFormatter
         return $"[blue]{server.GroupName}[/] | [yellow]{server.Instance}[/] | {dataSource}";
     }
 
-    /// <summary>
-    /// Formats the result line after execution completes.
-    /// </summary>
-    /// <param name="server">The server that was processed.</param>
-    /// <param name="result">The run result.</param>
-    /// <returns>The formatted result line.</returns>
+    /// <inheritdoc/>
     public string FormatResultLine(Server server, RunResult result)
     {
         var (color, symbol) = result.Succeeded ? ("green", "✔") : ("red", "✘");
@@ -39,11 +30,7 @@ public class SqlServerFormatter : IRunnerFormatter
         return $"[{color}]{symbol}[/] [blue]{server.GroupName}[/] | [yellow]{server.Instance}[/] | {dataSource}";
     }
 
-    /// <summary>
-    /// Formats the server line shown before the exception details.
-    /// </summary>
-    /// <param name="server">The server that failed.</param>
-    /// <returns>The formatted exception line.</returns>
+    /// <inheritdoc/>
     public string FormatExceptionLine(Server server)
     {
         if (server is not SqlServer sqlServer)
@@ -51,5 +38,15 @@ public class SqlServerFormatter : IRunnerFormatter
 
         var dataSource = sqlServer.DataSource;
         return $"[blue]{server.GroupName}[/] | [yellow]{server.Instance}[/] | {dataSource}";
+    }
+
+    /// <inheritdoc/>
+    public string FormatCreated(Server server)
+    {
+        if (server is not SqlServer sqlServer)
+            return string.Empty;
+
+        var dataSource = sqlServer.DataSource;
+        return $"[green]✓[/] Successfully added SQL Server: [yellow]{dataSource}[/] / [yellow]{server.Instance}[/] to group [yellow]{server.GroupName}[/]";
     }
 }

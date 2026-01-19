@@ -9,7 +9,8 @@ namespace Poke.Commands;
 /// <summary>
 /// Command for adding a SQL Server entry via the 'new sqlserver' command.
 /// </summary>
-public class AddSqlServerCommand(ConfigManager configManager) : AsyncCommand<AddSqlServerSettings>
+public class AddSqlServerCommand(ConfigManager configManager, SqlServerFormatter formatter)
+    : AsyncCommand<AddSqlServerSettings>
 {
     private const string InputModeConnectionString = "Connection String";
     private const string InputModeIndividualDetails = "Individual Details (Data Source)";
@@ -28,9 +29,7 @@ public class AddSqlServerCommand(ConfigManager configManager) : AsyncCommand<Add
         config = config with { Servers = [.. serversList] };
         await configManager.Save(config, settings.ConfigFile);
 
-        AnsiConsole.MarkupLineInterpolated(
-            $"[green]✓[/] Successfully added SQL Server: [yellow]{newServer.DataSource}[/] / [yellow]{newServer.Instance}[/] to group [yellow]{newServer.GroupName}[/]"
-        );
+        AnsiConsole.MarkupLine(formatter.FormatCreated(newServer));
 
         return 0;
     }
