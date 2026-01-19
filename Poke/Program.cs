@@ -18,6 +18,7 @@ services.AddSingleton<RunnerStatus>();
 services.AddSingleton<JsonConfigFile>();
 services.AddSingleton<ConfigManager>();
 services.AddSingleton<ConfigMigrator>();
+services.AddSingleton<SqlServerFormatter>();
 services.AddSingleton<IConfigOutput, SqlServerConfigOutput>();
 services.AddSingleton<IConfigOutput, HttpServerConfigOutput>();
 services.AddSingleton<IMigration, V1>();
@@ -49,11 +50,11 @@ app.Configure(cfg =>
             branch.SetDescription("Add a new server to the configuration file.");
 
             branch
-                .AddCommand<AddSqlServerCommand>("sqlserver")
+                .AddCommand<NewSqlServerCommand>("sqlserver")
                 .WithDescription("Add a new SQL Server to the configuration file.");
 
             branch
-                .AddCommand<AddHttpCommand>("http")
+                .AddCommand<NewHttpCommand>("http")
                 .WithDescription("Add a new HTTP Server to the configuration file.");
         }
     );
