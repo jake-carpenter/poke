@@ -49,6 +49,10 @@ app.Configure(cfg =>
             branch
                 .AddCommand<AddSqlServerCommand>("sqlserver")
                 .WithDescription("Add a new SQL Server to the configuration file.");
+
+            branch
+                .AddCommand<AddHttpCommand>("http")
+                .WithDescription("Add a new HTTP Server to the configuration file.");
         }
     );
 });

@@ -8,6 +8,7 @@ namespace Poke.Models;
 /// </summary>
 [JsonPolymorphic]
 [JsonDerivedType(typeof(SqlServer), typeDiscriminator: "SqlServer")]
+[JsonDerivedType(typeof(HttpServer), typeDiscriminator: "Http")]
 public abstract record Server
 {
     /// <summary>
