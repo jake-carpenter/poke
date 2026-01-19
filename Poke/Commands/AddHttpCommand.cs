@@ -18,11 +18,11 @@ public class AddHttpCommand(ConfigManager configManager) : AsyncCommand<AddHttpS
     )
     {
         var config = await configManager.Read(settings.ConfigFile);
-        var (_, isFailure, server) = CreateServer(settings);
+        var (_, isFailure, server, error) = CreateServer(settings);
 
         if (isFailure)
         {
-            AnsiConsole.MarkupLine("[red]Error:[/] {result.Error}");
+            AnsiConsole.MarkupLineInterpolated($"[red]Error:[/] {error}");
             return 1;
         }
 
