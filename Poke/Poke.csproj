@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
@@ -7,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <PropertyGroup>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>poke</ToolCommandName>
@@ -21,19 +19,15 @@
     <PackageTags>cli</PackageTags>
     <NoWarn>$(NoWarn);PKV0032</NoWarn>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugType>none</DebugType>
   </PropertyGroup>
-
   <PropertyGroup>
     <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
-
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="/" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" Version="3.6.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
@@ -49,5 +43,4 @@
     </PackageReference>
     <PackageReference Include="Spectre.Console.Cli" Version="0.53.1" />
   </ItemGroup>
-
 </Project>
