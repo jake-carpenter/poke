@@ -6,6 +6,11 @@ using Spectre.Console.Cli;
 
 namespace Poke.Commands;
 
+/// <summary>
+/// Legacy command for adding a SQL Server entry.
+/// Use <see cref="AddSqlServerCommand"/> via 'new sqlserver' instead.
+/// </summary>
+[Obsolete("Use 'new sqlserver' command instead. This command will be removed in a future version.")]
 public class AddCommand(ConfigManager configManager) : AsyncCommand<AddSettings>
 {
     public override async Task<int> ExecuteAsync(

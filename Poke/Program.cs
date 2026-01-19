@@ -33,8 +33,24 @@ app.Configure(cfg =>
 
     cfg.AddCommand<ConfigCommand>("config").WithDescription("Display configuration.");
 
+#pragma warning disable CS0618 // Type or member is obsolete - kept for backwards compatibility
     cfg.AddCommand<AddCommand>("add")
-        .WithDescription("Add a new SQL Server to the configuration file.");
+        .WithDescription(
+            "[[Deprecated]] Add a new SQL Server to the configuration file. Use 'new sqlserver' instead."
+        );
+#pragma warning restore CS0618
+
+    cfg.AddBranch(
+        "new",
+        branch =>
+        {
+            branch.SetDescription("Add a new server to the configuration file.");
+
+            branch
+                .AddCommand<AddSqlServerCommand>("sqlserver")
+                .WithDescription("Add a new SQL Server to the configuration file.");
+        }
+    );
 });
 
 await app.RunAsync(args);
