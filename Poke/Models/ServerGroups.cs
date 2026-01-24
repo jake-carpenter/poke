@@ -23,8 +23,8 @@ public class ServerGroups : Dictionary<string, ServerGroup>
     /// </summary>
     /// <param name="type">The server type discriminator.</param>
     /// <returns>The matching server groups.</returns>
-    public IEnumerable<ServerGroup> ByType(string type)
+    public IEnumerable<ServerGroup> ByType(ServerType type)
     {
-        return Values.Where(g => g.Type == type);
+        return Values.Where(x => x.Type == type);
     }
 }

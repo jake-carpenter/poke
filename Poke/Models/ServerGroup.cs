@@ -10,5 +10,5 @@ public record ServerGroup(string GroupName, Server[] Servers)
     /// <summary>
     /// The server type for the group.
     /// </summary>
-    public string Type => Servers.First().Type;
+    public ServerType Type => Servers.First().Type;
 }

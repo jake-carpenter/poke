@@ -10,7 +10,7 @@ public interface IConfigOutput
     /// <summary>
     /// The type of server the output is for.
     /// </summary>
-    string ServerType { get; }
+    ServerType ServerType { get; }
 
     /// <summary>
     /// Writes the configuration output for the given server groups.
