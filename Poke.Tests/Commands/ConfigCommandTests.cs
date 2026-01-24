@@ -1,6 +1,5 @@
 using Poke.Commands;
 using Poke.Config;
-using Poke.Runners;
 
 namespace Poke.Tests.Commands;
 
@@ -34,8 +33,8 @@ public class ConfigCommandTests(AppFactory appFactory)
     }
 
     [Test]
-    [MethodDataSource(typeof(DataSources), nameof(DataSources.ConfigCommandHttpServers))]
-    public async Task ConfigCommand_Returns_Exit_Code_0_When_Servers_Configured(ConfigCommandTestData data)
+    [MethodDataSource(typeof(DataSources), nameof(DataSources.HttpServers))]
+    public async Task ConfigCommand_Returns_Exit_Code_0_When_Servers_Configured(HttpServerSource data)
     {
         var config = UserConfig.CreateEmpty() with { Servers = data.Servers };
 
@@ -48,8 +47,8 @@ public class ConfigCommandTests(AppFactory appFactory)
     }
 
     [Test]
-    [MethodDataSource(typeof(DataSources), nameof(DataSources.ConfigCommandHttpServers))]
-    public async Task ConfigCommand_Displays_Http_Servers_Header_When_Configured(ConfigCommandTestData data)
+    [MethodDataSource(typeof(DataSources), nameof(DataSources.HttpServers))]
+    public async Task ConfigCommand_Displays_Http_Servers_Header_When_Configured(HttpServerSource data)
     {
         var config = UserConfig.CreateEmpty() with { Servers = data.Servers };
 
@@ -57,7 +56,7 @@ public class ConfigCommandTests(AppFactory appFactory)
         app.SetDefaultCommand<ConfigCommand>();
 
         var result = await app.RunAsync();
-        var expectedServer = data.Servers.Cast<HttpServer>().First();
+        var expectedServer = data.Servers.First();
 
         await Assert.That(result.Output).Contains("HTTP Server connections");
         await Assert.That(result.Output).Contains(expectedServer.GroupName);
@@ -66,8 +65,8 @@ public class ConfigCommandTests(AppFactory appFactory)
     }
 
     [Test]
-    [MethodDataSource(typeof(DataSources), nameof(DataSources.ConfigCommandHttpServers))]
-    public async Task ConfigCommand_Displays_All_Http_Servers_When_Configured(ConfigCommandTestData data)
+    [MethodDataSource(typeof(DataSources), nameof(DataSources.HttpServers))]
+    public async Task ConfigCommand_Displays_All_Http_Servers_When_Configured(HttpServerSource data)
     {
         var config = UserConfig.CreateEmpty() with { Servers = data.Servers };
 
@@ -80,8 +79,8 @@ public class ConfigCommandTests(AppFactory appFactory)
     }
 
     [Test]
-    [MethodDataSource(typeof(DataSources), nameof(DataSources.ConfigCommandSqlServerServers))]
-    public async Task ConfigCommand_Displays_SqlServer_Servers_Header_When_Configured(ConfigCommandTestData data)
+    [MethodDataSource(typeof(DataSources), nameof(DataSources.SqlServers))]
+    public async Task ConfigCommand_Displays_SqlServer_Servers_Header_When_Configured(SqlServerSource data)
     {
         var config = UserConfig.CreateEmpty() with { Servers = data.Servers };
         var app = appFactory.CreateApp(config);
@@ -93,8 +92,8 @@ public class ConfigCommandTests(AppFactory appFactory)
     }
 
     [Test]
-    [MethodDataSource(typeof(DataSources), nameof(DataSources.ConfigCommandSqlServerServers))]
-    public async Task ConfigCommand_Displays_All_SqlServer_Servers_When_Configured(ConfigCommandTestData data)
+    [MethodDataSource(typeof(DataSources), nameof(DataSources.SqlServers))]
+    public async Task ConfigCommand_Displays_All_SqlServer_Servers_When_Configured(SqlServerSource data)
     {
         var config = UserConfig.CreateEmpty() with { Servers = data.Servers };
         var app = appFactory.CreateApp(config);
@@ -106,8 +105,8 @@ public class ConfigCommandTests(AppFactory appFactory)
     }
 
     [Test]
-    [MethodDataSource(typeof(DataSources), nameof(DataSources.ConfigCommandMixedServers))]
-    public async Task ConfigCommand_Displays_Mixed_Servers_Header_When_Configured(ConfigCommandTestData data)
+    [MethodDataSource(typeof(DataSources), nameof(DataSources.MixedServers))]
+    public async Task ConfigCommand_Displays_Mixed_Servers_Header_When_Configured(MixedServerSource data)
     {
         var config = UserConfig.CreateEmpty() with { Servers = data.Servers };
         var app = appFactory.CreateApp(config);
@@ -120,8 +119,8 @@ public class ConfigCommandTests(AppFactory appFactory)
     }
 
     [Test]
-    [MethodDataSource(typeof(DataSources), nameof(DataSources.ConfigCommandMixedServers))]
-    public async Task ConfigCommand_Displays_All_Mixed_Servers_When_Configured(ConfigCommandTestData data)
+    [MethodDataSource(typeof(DataSources), nameof(DataSources.MixedServers))]
+    public async Task ConfigCommand_Displays_All_Mixed_Servers_When_Configured(MixedServerSource data)
     {
         var config = UserConfig.CreateEmpty() with { Servers = data.Servers };
         var app = appFactory.CreateApp(config);
@@ -133,8 +132,8 @@ public class ConfigCommandTests(AppFactory appFactory)
     }
 
     [Test]
-    [MethodDataSource(typeof(DataSources), nameof(DataSources.ConfigCommandMixedServers))]
-    public async Task ConfigCommand_Uses_Specified_Config_File_Path_When_Provided(ConfigCommandTestData data)
+    [MethodDataSource(typeof(DataSources), nameof(DataSources.MixedServers))]
+    public async Task ConfigCommand_Uses_Specified_Config_File_Path_When_Provided(MixedServerSource data)
     {
         const string customConfigPath = "/custom/path/config.json";
         var app = appFactory.CreateApp();
@@ -147,8 +146,8 @@ public class ConfigCommandTests(AppFactory appFactory)
     }
 
     [Test]
-    [MethodDataSource(typeof(DataSources), nameof(DataSources.ConfigCommandMixedServers))]
-    public async Task ConfigCommand_Uses_Default_Config_File_Path_When_Option_Not_Provided(ConfigCommandTestData data)
+    [MethodDataSource(typeof(DataSources), nameof(DataSources.MixedServers))]
+    public async Task ConfigCommand_Uses_Default_Config_File_Path_When_Option_Not_Provided(MixedServerSource data)
     {
         var config = UserConfig.CreateEmpty() with { Servers = data.Servers };
         var app = appFactory.CreateApp(config);
