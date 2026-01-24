@@ -12,7 +12,7 @@ public class HttpServerConfigOutput(IAnsiConsole console) : IConfigOutput
     /// <summary>
     /// The server type this output handles.
     /// </summary>
-    public string ServerType => "Http";
+    public ServerType ServerType => ServerType.Http;
 
     /// <summary>
     /// Writes formatted configuration output for HTTP Server groups.

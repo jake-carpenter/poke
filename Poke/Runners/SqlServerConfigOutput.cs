@@ -12,7 +12,7 @@ public class SqlServerConfigOutput(IAnsiConsole console) : IConfigOutput
     /// <summary>
     /// The server type this output handles.
     /// </summary>
-    public string ServerType => "SqlServer";
+    public ServerType ServerType => ServerType.SqlServer;
 
     /// <summary>
     /// Writes formatted configuration output for SQL Server groups.

@@ -30,5 +30,5 @@ public record SqlServer : Server
     /// The server type discriminator.
     /// </summary>
     [JsonIgnore]
-    public override string Type => "SqlServer";
+    public override ServerType Type => ServerType.SqlServer;
 }

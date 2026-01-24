@@ -22,5 +22,5 @@ public record HttpServer : Server
     /// The server type discriminator.
     /// </summary>
     [JsonIgnore]
-    public override string Type => "Http";
+    public override ServerType Type => ServerType.Http;
 }

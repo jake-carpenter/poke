@@ -7,8 +7,8 @@ namespace Poke.Models;
 /// Base model for a server connection entry.
 /// </summary>
 [JsonPolymorphic]
-[JsonDerivedType(typeof(SqlServer), typeDiscriminator: "SqlServer")]
-[JsonDerivedType(typeof(HttpServer), typeDiscriminator: "Http")]
+[JsonDerivedType(typeof(SqlServer), typeDiscriminator: nameof(ServerType.SqlServer))]
+[JsonDerivedType(typeof(HttpServer), typeDiscriminator: nameof(ServerType.Http))]
 public abstract record Server
 {
     /// <summary>
@@ -24,5 +24,5 @@ public abstract record Server
     /// <summary>
     /// The server type discriminator.
     /// </summary>
-    public abstract string Type { get; }
+    public abstract ServerType Type { get; }
 }
