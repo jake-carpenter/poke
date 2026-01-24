@@ -10,17 +10,13 @@ namespace Poke.Runners;
 /// </summary>
 public class SqlServerRunner : IRunner
 {
-    /// <summary>
-    /// The formatter for SQL Server output.
-    /// </summary>
+    /// <inheritdoc/>
+    public ServerType ServerType => ServerType.SqlServer;
+
+    /// <inheritdoc/>
     public IRunnerFormatter Formatter => new SqlServerFormatter();
 
-    /// <summary>
-    /// Executes the SQL Server connectivity check.
-    /// </summary>
-    /// <param name="server">The server to execute.</param>
-    /// <param name="settings">The run settings.</param>
-    /// <returns>The run result.</returns>
+    /// <inheritdoc/>
     public async Task<RunResult> Execute(Server server, RunSettings settings)
     {
         if (server is not SqlServer sqlServer)

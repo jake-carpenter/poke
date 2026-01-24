@@ -1,14 +1,20 @@
 using Poke.Commands;
 using Poke.Models;
-using Poke.Runners;
 
 namespace Poke.Infrastructure;
 
 /// <summary>
 /// Selects the appropriate runner for a given server type.
 /// </summary>
-public class RunnerFactory(IEnumerable<IRunner> runners)
+public class RunnerFactory
 {
+    private readonly Dictionary<ServerType, IRunner> _runnerLookup;
+
+    public RunnerFactory(IEnumerable<IRunner> runners)
+    {
+        _runnerLookup = runners.ToDictionary(x => x.ServerType);
+    }
+
     /// <summary>
     /// Gets a runner for the provided server and settings.
     /// </summary>
@@ -17,18 +23,8 @@ public class RunnerFactory(IEnumerable<IRunner> runners)
     /// <returns>The matching runner.</returns>
     public IRunner GetRunner(Server server, RunSettings settings)
     {
-        IRunner? runner = server switch
-        {
-            SqlServer => runners.OfType<SqlServerRunner>().FirstOrDefault(),
-            HttpServer => runners.OfType<HttpServerRunner>().FirstOrDefault(),
-            _ => throw new NotSupportedException(
-                $"No runner available for server type: {server.GetType().Name}"
-            ),
-        };
-
-        if (runner == null)
-            throw new InvalidOperationException("No suitable runner found.");
-
-        return runner;
+        return !_runnerLookup.TryGetValue(server.Type, out var runner)
+            ? throw new InvalidOperationException("No suitable runner found.")
+            : runner;
     }
 }

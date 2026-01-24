@@ -9,17 +9,14 @@ namespace Poke.Runners;
 /// </summary>
 public class HttpServerRunner : IRunner
 {
-    /// <summary>
-    /// The formatter for HTTP Server output.
-    /// </summary>
+    /// <inheritdoc/>
+    public ServerType ServerType => ServerType.Http;
+
+    /// <inheritdoc/>
+
     public IRunnerFormatter Formatter => new HttpServerFormatter();
 
-    /// <summary>
-    /// Executes the HTTP Server connectivity check.
-    /// </summary>
-    /// <param name="server">The server to execute.</param>
-    /// <param name="settings">The run settings.</param>
-    /// <returns>The run result.</returns>
+    /// <inheritdoc/>
     public async Task<RunResult> Execute(Server server, RunSettings settings)
     {
         if (server is not HttpServer httpServer)
