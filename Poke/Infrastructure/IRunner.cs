@@ -9,6 +9,11 @@ namespace Poke.Infrastructure;
 public interface IRunner
 {
     /// <summary>
+    /// The server type this runner handles.
+    /// </summary>
+    ServerType ServerType { get; }
+
+    /// <summary>
     /// The formatter for the runner.
     /// </summary>
     IRunnerFormatter Formatter { get; }
